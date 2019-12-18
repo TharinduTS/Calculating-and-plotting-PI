@@ -57,6 +57,7 @@ for (current_pop in all_populations) {
   plot_list<-list()
   x<-0
   mean_PI<-mean(PI)
+  max_PI<-max((PI-mean_PI))
   #remove scientific notation
   options(scipen=999)
   
@@ -72,7 +73,7 @@ for (current_pop in all_populations) {
     a<-(ggplot(chrom_data,aes(x=BIN_START,y=(PI-mean_PI),col=(PI-mean_PI)))+
           geom_point()+
           labs(title = paste("PI",current_pop,i))
-        #+ylim(-1, 1)
+        +ylim(0, max_PI)
         )
     plot_list[[x]]=a
   }
