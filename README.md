@@ -39,29 +39,66 @@ for i in Chr1L Chr1S Chr2L Chr2S Chr3L Chr3S Chr4L Chr4S Chr5L Chr5S Chr6L Chr6S
 
 # create plot list
 ```r
-library(ggplot2)
-plot_list<-list()
-x<-0
-ch_numbers<-c("chr1L","chr1S","chr2L","chr2S","chr3L","chr3S","chr4L","chr4S","chr5L","chr5S","chr6L","chr6S","chr7L","chr7S","chr8L","chr8S","chr9_10L","chr9_10S")
-for (i in ch_numbers) {
-  chrom_data<-read.table(paste(i,".windowed.pi",sep=''),header = T)
-  attach(chrom_data)
+all_populations<-c("Cam")
+
+#**********************************
+for (current_pop in all_populations) {
   
-  x<-x+1
   
-  a<-ggplot(chrom_data,aes(x=BIN_START,y=PI))+
-    geom_point()+
-    labs(title = i)+
-    ylim(0, max(PI))
-  plot_list[[x]]=a
+  #population
+  pop<-current_pop
+  
+  #**********************************
+  
+  setwd(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/allofraseri/Fst/",pop,sep = ''))
+  
+  
+  library(ggplot2)
+  plot_list<-list()
+  x<-0
+  
+  #remove scientific notation
+  options(scipen=999)
+  
+  ch_numbers<-c("chr1L","chr1S","chr2L","chr2S","chr3L","chr3S","chr4L","chr4S","chr5L","chr5S","chr6L","chr6S","chr7L","chr7S","chr8L","chr8S","chr9_10L","chr9_10S")
+  for (i in ch_numbers) {
+    chrom_data<-read.table(paste("Fst_",pop,"_F_VS_M_",i,".windowed.weir.fst",sep=''),header = T)
+    attach(chrom_data)
+    
+    x<-x+1
+    
+    
+    
+    a<-(ggplot(chrom_data,aes(x=BIN_START,y=MEAN_FST,col=MEAN_FST))+
+          geom_point()+
+          labs(title = paste("Mean_Fst_",current_pop,i))
+        +ylim(-1, 1))
+    plot_list[[x]]=a
+  }
+  
+  
+  
+  library(gridExtra)
+  Final_plot_grid<-grid.arrange(
+    grobs = plot_list,
+    ncol=2
+    
+    #widths = c(2, 2),
+    #heights=c(2,1)
+  )
+  
+  #Sys.sleep(10)
+  
+  print("done")
+  
+  
+  
+  #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/",pop,"/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/all_populations_PI-mean/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/allofraseri/Fst/",pop,"_Mean_Fst_Male_VS_Female.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  #*************************************
 }
-
-
-library(gridExtra)
-grid.arrange(
-  grobs = plot_list,
-  widths = c(2, 2),
-)
+#************************************
 ```
 (use to get y max - max(PI) )
 
