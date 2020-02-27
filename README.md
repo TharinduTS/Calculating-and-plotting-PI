@@ -33,7 +33,6 @@ vcf-query -l mpileup_raw_wildBorealis_AustinGenome.vcf | grep "Mal" | sed 's/\r/
 ```
 bcftools view -s Mal_NMK_BJE4563_Xb.fq.gz,xxx,xxxx Borealis_ch8.vcf.recode.vcf > filtered_central_males.vcf
 ```
-#***************************************************************************************
 
 # Loop through all populations
 
@@ -47,6 +46,16 @@ for i in Chr1L Chr1S Chr2L Chr2S Chr3L Chr3S Chr4L Chr4S Chr5L Chr5S Chr6L Chr6S
 ```
 for i in Chr1L Chr1S Chr2L Chr2S Chr3L Chr3S Chr4L Chr4S Chr5L Chr5S Chr6L Chr6S Chr7L Chr7S Chr8L Chr8S Chr9_10L Chr9_10S; do vcftools --vcf $i.recode.vcf --window-pi 50000 --window-pi-step 50000 --out out/$i; done
 ```
+#***************************************************************************************
+
+#split all the populations into seperate chromosomes and storing them inside newly made folders
+
+```bash
+declare -a populations=("lab_east_females" "lab_east_females_without_parents" "lab_east_males" "lab_east_males_without_parents" "lab_west_females" "lab_west_females_without_parents" "lab_west_males" "lab_west_males_without_parents" "wild_east_females" "wild_east_males" "wild_west_females" "wild_west_males")
+declare -a chromosomes=("chr1L" "chr1S" "chr2L" "chr2S" "chr3L" "chr3S" "chr4L" "chr4S" "chr5L" "chr5S" "chr6L" "chr6S" "chr7L" "chr7S" "chr8L" "chr8S" "chr9_10L" "chr9_10S")
+for i in ${populations[@]}; do mkdir ../splitted_populations/$i/splitted; done
+for i in ${populations[@]}; do for j in ${chromosomes[@]}; do vcftools --vcf ../splitted_populations/$i/$i\.recode\.vcf --chr $j --recode --recode-INFO-all --out ../splitted_populations/$i/splitted/$j; done; done
+~~~
 
 # create plot list
 ```r
