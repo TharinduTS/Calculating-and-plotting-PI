@@ -1,6 +1,6 @@
 #Create vi text files with a list of individuals for each population
 
-# use this script to split all the populations and place them on different folders
+# use this script to split all the populations and place them in seperate folders
 
 ```bash
 declare -a populations=("lab_east_females" "lab_east_females_without_parents" "lab_east_males" "lab_east_males_without_parents" "lab_west_females" "lab_west_females_without_parents" "lab_west_males" "lab_west_males_without_parents" "wild_east_females" "wild_east_males" "wild_west_females" "wild_west_males")
