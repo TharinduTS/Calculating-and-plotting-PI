@@ -52,9 +52,18 @@ for i in Chr1L Chr1S Chr2L Chr2S Chr3L Chr3S Chr4L Chr4S Chr5L Chr5S Chr6L Chr6S
 
 ```bash
 declare -a populations=("lab_east_females" "lab_east_females_without_parents" "lab_east_males" "lab_east_males_without_parents" "lab_west_females" "lab_west_females_without_parents" "lab_west_males" "lab_west_males_without_parents" "wild_east_females" "wild_east_males" "wild_west_females" "wild_west_males")
-declare -a chromosomes=("chr1L" "chr1S" "chr2L" "chr2S" "chr3L" "chr3S" "chr4L" "chr4S" "chr5L" "chr5S" "chr6L" "chr6S" "chr7L" "chr7S" "chr8L" "chr8S" "chr9_10L" "chr9_10S")
+declare -a chromosomes=("Chr1" "Chr2" "Chr3" "Chr4" "Chr5" "Chr6" "Chr7" "Chr8" "Chr9" "Chr10")
 for i in ${populations[@]}; do mkdir ../splitted_populations/$i/splitted; done
 for i in ${populations[@]}; do for j in ${chromosomes[@]}; do vcftools --vcf ../splitted_populations/$i/$i\.recode\.vcf --chr $j --recode --recode-INFO-all --out ../splitted_populations/$i/splitted/$j; done; done
+```
+
+# Calculate PI for all those together
+
+```bash
+declare -a populations=("lab_east_females" "lab_east_females_without_parents" "lab_east_males" "lab_east_males_without_parents" "lab_west_females" "lab_west_females_without_parents" "lab_west_males" "lab_west_males_without_parents" "wild_east_females" "wild_east_males" "wild_west_females" "wild_west_males")
+declare -a chromosomes=("Chr1" "Chr2" "Chr3" "Chr4" "Chr5" "Chr6" "Chr7" "Chr8" "Chr9" "Chr10")
+for i in ${populations[@]}; do mkdir ../splitted_populations/$i/PI_out; done
+for i in ${populations[@]}; do for j in ${chromosomes[@]}; do vcftools --vcf ../splitted_populations/$i/splitted/$j\.recode\.vcf --window-pi 50000 --window-pi-step 50000  --out ../splitted_populations/$i/PI_out/$j; done; done
 ```
 
 # create plot list
