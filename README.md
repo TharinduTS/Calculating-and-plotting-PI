@@ -1,3 +1,14 @@
+#Create vi text files with a list of individuals for each population
+
+# use this script to split all the populations and place them on different folders
+
+```bash
+declare -a populations=("lab_east_females" "lab_east_females_without_parents" "lab_east_males" "lab_east_males_without_parents" "lab_west_females" "lab_west_females_without_parents" "lab_west_males" "lab_west_males_without_parents" "wild_east_females" "wild_east_males" "wild_west_females" "wild_west_males")
+for i in ${populations[@]}; do mkdir ../splitted_populations/$i; done 
+for i in ${populations[@]}; do vcftools --vcf ./../full_genome/niger_only_trop.recode.vcf --keep ./../populations/$i --recode --out ../splitted_populations/$i/$i; done
+```
+#***********Older Method For the same thing*******************************************************
+
 # Calculating-and-plotting-PI
 For populations
 
@@ -22,7 +33,7 @@ vcf-query -l mpileup_raw_wildBorealis_AustinGenome.vcf | grep "Mal" | sed 's/\r/
 ```
 bcftools view -s Mal_NMK_BJE4563_Xb.fq.gz,xxx,xxxx Borealis_ch8.vcf.recode.vcf > filtered_central_males.vcf
 ```
-
+#***************************************************************************************
 
 # Loop through all populations
 
