@@ -55,7 +55,7 @@ declare -a populations=("lab_east_females" "lab_east_females_without_parents" "l
 declare -a chromosomes=("chr1L" "chr1S" "chr2L" "chr2S" "chr3L" "chr3S" "chr4L" "chr4S" "chr5L" "chr5S" "chr6L" "chr6S" "chr7L" "chr7S" "chr8L" "chr8S" "chr9_10L" "chr9_10S")
 for i in ${populations[@]}; do mkdir ../splitted_populations/$i/splitted; done
 for i in ${populations[@]}; do for j in ${chromosomes[@]}; do vcftools --vcf ../splitted_populations/$i/$i\.recode\.vcf --chr $j --recode --recode-INFO-all --out ../splitted_populations/$i/splitted/$j; done; done
-~~~
+```
 
 # create plot list
 ```r
