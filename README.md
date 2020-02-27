@@ -57,7 +57,7 @@ for i in ${populations[@]}; do mkdir ../splitted_populations/$i/splitted; done
 for i in ${populations[@]}; do for j in ${chromosomes[@]}; do vcftools --vcf ../splitted_populations/$i/$i\.recode\.vcf --chr $j --recode --recode-INFO-all --out ../splitted_populations/$i/splitted/$j; done; done
 ```
 
-# Calculate PI for all those together
+# Calculate PI for all those together and saving them in a newly made PI_out folder
 
 ```bash
 declare -a populations=("lab_east_females" "lab_east_females_without_parents" "lab_east_males" "lab_east_males_without_parents" "lab_west_females" "lab_west_females_without_parents" "lab_west_males" "lab_west_males_without_parents" "wild_east_females" "wild_east_males" "wild_west_females" "wild_west_males")
