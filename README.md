@@ -75,7 +75,7 @@ for i in ${populations[@]}; do scp tharindu@info.mcmaster.ca:/net/infofile2/2/sc
 ```
 # create plot list
 ```r
-all_populations<-c("females","males")
+all_populations<-c('lab_east_females','lab_west_males','lab_east_females','lab_west_males_without_parents','lab_east_females_without_parents','wild_east_females','lab_east_males','wild_east_males','lab_east_males_without_parents','wild_west_females','lab_west_females','wild_west_males','lab_west_females_without_parents')
 
 #**********************************
 for (current_pop in all_populations) {
@@ -86,22 +86,22 @@ for (current_pop in all_populations) {
   
   #**********************************
   
-  setwd(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/allofraseri/PI/",pop,sep = ''))
+  setwd(paste("~/Desktop/OneDrive - McMaster University/for lab and research/Tharindu on Mac/lab/PI_and_Fst/Pi/step50000/Tropicalis/",pop,sep = ''))
   
   
   library(ggplot2)
   plot_list<-list()
   x<-0
-  mean_PI<-mean(PI)
-  max_PI<-max((PI-mean_PI))
+
   #remove scientific notation
   options(scipen=999)
   
-  ch_numbers<-c("chr1L","chr1S","chr2L","chr2S","chr3L","chr3S","chr4L","chr4S","chr5L","chr5S","chr6L","chr6S","chr7L","chr7S","chr8L","chr8S","chr9_10L","chr9_10S")
+  ch_numbers<-c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6","Chr7","Chr8","Chr9","Chr10")
   for (i in ch_numbers) {
     chrom_data<-read.table(paste(i,".windowed.pi",sep=''),header = T)
     attach(chrom_data)
-    
+    mean_PI<-mean(PI)
+    max_PI<-max((PI-mean_PI))
     x<-x+1
     
     
@@ -110,7 +110,7 @@ for (current_pop in all_populations) {
           geom_point()+
           labs(title = paste("PI",current_pop,i))
         +ylim(0, max_PI)
-        )
+    )
     plot_list[[x]]=a
   }
   
@@ -133,7 +133,7 @@ for (current_pop in all_populations) {
   
   #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/",pop,"/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
   #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/all_populations_PI-mean/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
-  ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/allofraseri/PI/",pop,"PI.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  ggsave(paste("~/Desktop/OneDrive - McMaster University/for lab and research/Tharindu on Mac/lab/PI_and_Fst/Pi/step50000/Tropicalis/out/",pop,"_PI.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
   #*************************************
 }
 #************************************
