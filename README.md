@@ -140,3 +140,76 @@ for (current_pop in all_populations) {
 ```
 (use to get y max - max(PI) )
 
+# For male-female
+
+```R
+all_populations<-c('lab_east','lab_west','wild_east','wild_west')
+
+#**********************************
+for (current_pop in all_populations) {
+  
+  
+  #population
+  pop<-current_pop
+  
+  #**********************************
+  
+  setwd(paste("~/Desktop/OneDrive - McMaster University/for lab and research/Tharindu on Mac/lab/PI_and_Fst/Pi/step50000/Tropicalis/",sep = ''))
+ 
+  library(ggplot2)
+  plot_list<-list()
+  x<-0
+
+  #remove scientific notation
+  options(scipen=999)
+  
+  ch_numbers<-c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6","Chr7","Chr8","Chr9","Chr10")
+  for (i in ch_numbers) {
+    
+    males<-read.table(paste("./",pop,"_males/",i,".windowed.pi",sep = ''),h=T)
+    females<-read.table(paste("./",pop,"_females/",i,".windowed.pi",sep = ''),h=T)
+    
+    males_and_females<-inner_join(x=males,y=females,by="BIN_START")%>%
+      mutate(PI_difference=PI.x-PI.y)
+    #x-males y-females
+    
+    attach(males_and_females)
+    
+    
+    x<-x+1
+    
+    
+    
+    a<-(ggplot(males_and_females,aes(x=BIN_START,y=(PI_difference),col=(PI_difference)))+
+          geom_point()+
+          labs(title = paste("PI",current_pop,i))
+        +ylim(-0.00025,0.00025)
+    )
+    plot_list[[x]]=a
+  }
+  
+  
+  
+  library(gridExtra)
+  Final_plot_grid<-grid.arrange(
+    grobs = plot_list,
+    ncol=2
+    
+    #widths = c(2, 2),
+    #heights=c(2,1)
+  )
+  
+  #Sys.sleep(10)
+  
+  print("done")
+  
+  
+  
+  #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/",pop,"/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/all_populations_PI-mean/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  ggsave(paste("~/Desktop/OneDrive - McMaster University/for lab and research/Tharindu on Mac/lab/PI_and_Fst/Pi/step50000/Tropicalis/out/male-female/",pop,"_Male-Female_PI.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  #*************************************
+}
+#************************************
+```
+
