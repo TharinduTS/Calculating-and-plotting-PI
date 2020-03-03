@@ -212,4 +212,96 @@ for (current_pop in all_populations) {
 }
 #************************************
 ```
+# with male and female exclusive chromosome segments
 
+```r
+all_populations<-c('lab_east','lab_west','wild_east','wild_west')
+
+#**********************************
+for (current_pop in all_populations) {
+  
+  
+  #population
+  pop<-current_pop
+  
+  #**********************************
+  
+  setwd(paste("~/Desktop/OneDrive - McMaster University/for lab and research/Tharindu on Mac/lab/PI_and_Fst/Pi/step50000/Tropicalis/",sep = ''))
+ 
+  library(ggplot2)
+  library(dplyr)
+  plot_list<-list()
+  x<-0
+
+  #remove scientific notation
+  options(scipen=999)
+  
+  ch_numbers<-c("Chr1","Chr2","Chr3","Chr4","Chr5","Chr6","Chr7","Chr8","Chr9","Chr10")
+  for (i in ch_numbers) {
+    
+    #common in both sexes
+    males<-read.table(paste("./",pop,"_males/",i,".windowed.pi",sep = ''),h=T)
+    females<-read.table(paste("./",pop,"_females/",i,".windowed.pi",sep = ''),h=T)
+    
+    males_and_females<-inner_join(x=males,y=females,by="BIN_START")%>%
+      mutate(PI_difference=PI.x-PI.y)
+    #x-males y-females
+    
+    #exclusive in males
+    male_exclusive<-anti_join(males,females,by="BIN_START")
+    
+    #exclusive in females
+    female_exclusive<-anti_join(females,males,by="BIN_START")
+    
+    
+    #for exclusive PI plot
+  
+    x<-x+1
+    
+    
+    attach(male_exclusive)
+    a <- ggplot() +
+      geom_point(data=male_exclusive,aes(x=BIN_START,y=0.0002,colour='male_exclusive'),colour='blue',size=0.5)+
+      geom_point(data=female_exclusive,aes(x=BIN_START,y=0.000175),colour='pink',size=0.5)+
+      geom_point(data=males_and_females,aes(x=BIN_START,y=PI_difference,colour=(PI_difference)))+
+      labs(title = paste("PI(male-female)",current_pop,i))+
+      ylim(-0.00025,0.00025)+
+      xlab('Chromosome_position')+
+      ylab('PI_male-PI_female')
+  
+#    a<-ggplot()+
+#      geom_point(data=male_exclusive,aes(x=BIN_START,y=0.0002))+
+    legend()+
+#      geom_point(data=female_exclusive,aes(x=BIN_START,y=0.000175,colour='Female_exclusive'))+
+#      geom_point(data=males_and_females,aes(x=BIN_START,y=PI_difference,colour='PI_difference'))+
+#      labs(title = paste("PI(male-female)",current_pop,i))+
+#      ylim(-0.00025,0.00025)
+    
+    plot_list[[x]]=a
+  }
+  
+  plot_stuff <- ggplot(data=male_exclusive,aes(x=BIN_START,y=0.0002))
+  plot_stuff + geom_point(color="green",size=0.1)
+  
+  library(gridExtra)
+  Final_plot_grid<-grid.arrange(
+    grobs = plot_list,
+    ncol=2
+    
+    #widths = c(2, 2),
+    #heights=c(2,1)
+  )
+  
+  #Sys.sleep(10)
+  
+  print("done")
+  
+  
+  
+  #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/",pop,"/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  #ggsave(paste("~/Desktop/OneDrive - McMaster University/Tharindu on Mac/lab/Pi/step50000/Borealis/Different_populations/all_populations_PI-mean/",pop,"_PI_mean_substracted.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  ggsave(paste("~/Desktop/OneDrive - McMaster University/for lab and research/Tharindu on Mac/lab/PI_and_Fst/Pi/step50000/Tropicalis/out/m-f_with_exclusives/",pop,"_Male-Female_PI.pdf",sep = ''),plot = Final_plot_grid,width = 15,height = 30)
+  #*************************************
+}
+#************************************
+```
